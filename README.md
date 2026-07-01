@@ -1,11 +1,11 @@
-# opencode-session-id
+# opencode-session-id-display
 
 An [opencode](https://opencode.ai) TUI plugin that displays the current session ID in the sidebar.
 
 ## Installation
 
 ```bash
-npx opencode-session-id install
+npx opencode-session-id-display install
 ```
 
 This will:
@@ -18,7 +18,7 @@ Restart opencode TUI to see the session ID in the right sidebar.
 ## Uninstall
 
 ```bash
-npx opencode-session-id uninstall
+npx opencode-session-id-display uninstall
 ```
 
 Removes the symlink and cleans up `tui.json`.

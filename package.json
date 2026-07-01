@@ -1,9 +1,9 @@
 {
-  "name": "opencode-session-id",
+  "name": "opencode-session-id-display",
   "version": "1.0.0",
   "type": "module",
   "bin": {
-    "opencode-session-id": "./bin/cli.js"
+    "opencode-session-id-display": "./bin/cli.js"
   },
   "dependencies": {
     "@opencode-ai/plugin": "^1.17.6"
