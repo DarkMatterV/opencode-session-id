@@ -1,0 +1,15 @@
+{
+  "name": "opencode-session-id",
+  "version": "1.0.0",
+  "type": "module",
+  "bin": {
+    "opencode-session-id": "./bin/cli.js"
+  },
+  "dependencies": {
+    "@opencode-ai/plugin": "^1.17.6"
+  },
+  "peerDependencies": {
+    "@opentui/core": ">=0.3.4",
+    "@opentui/solid": ">=0.3.4"
+  }
+}
