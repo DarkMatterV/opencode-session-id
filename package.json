@@ -1,6 +1,10 @@
 {
   "name": "opencode-session-id-display",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DarkMatterV/opencode-session-id.git"
+  },
   "type": "module",
   "bin": {
     "opencode-session-id-display": "./bin/cli.js"
