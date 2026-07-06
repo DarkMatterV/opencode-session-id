@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { existsSync, mkdirSync, symlinkSync, unlinkSync } from "node:fs";
+import { existsSync, mkdirSync, symlinkSync, unlinkSync, copyFileSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -7,20 +7,47 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const packageDir = resolve(__dirname, "..");
 const sourceFile = join(packageDir, "src/OpencodeSessionID.tui.tsx");
-const configDir = join(process.env.HOME, ".config", "opencode");
+
+const homeDir = process.env.HOME || process.env.USERPROFILE || "";
+const configDir = process.platform === "win32"
+  ? join(process.env.APPDATA || join(homeDir, "AppData", "Roaming"), "opencode")
+  : join(homeDir, ".config", "opencode");
+
 const pluginDir = join(configDir, "plugins");
-const symlinkPath = join(pluginDir, "OpencodeSessionID.tui.tsx");
+const linkPath = join(pluginDir, "OpencodeSessionID.tui.tsx");
 const tuiJsonPath = join(configDir, "tui.json");
 
-const pluginEntry = symlinkPath;
+const pluginEntry = linkPath.replace(/\\/g, "/");
 
 const oldSymlinks = [
-  join(pluginDir, "opencode-session-id"),
+  join(configDir, "plugin", "opencode-session-id"),
+  join(configDir, "plugins", "opencode-session-id"),
+  join(configDir, "plugin", "OpencodeSessionID.tui.tsx"),
 ];
 
 const oldPluginPaths = [
   "./plugin/opencode-session-id/dist/index.js",
+  "./plugins/opencode-session-id/dist/index.js",
 ];
+
+let isCopied = false;
+
+function createLink(src, dest) {
+  try {
+    symlinkSync(src, dest, "file");
+    return "symlink";
+  } catch {
+    copyFileSync(src, dest);
+    isCopied = true;
+    return "copy";
+  }
+}
+
+function removeLink(path) {
+  try {
+    unlinkSync(path);
+  } catch {}
+}
 
 function hasPluginEntry(config) {
   if (!Array.isArray(config.plugin)) return false;
@@ -30,14 +57,15 @@ function hasPluginEntry(config) {
 function isOldPluginEntry(p) {
   if (typeof p !== "string") return false;
   if (oldPluginPaths.includes(p)) return true;
-  return oldSymlinks.some((old) => p === old);
+  return oldSymlinks.some((old) => p === old || p === old.replace(/\\/g, "/"));
 }
 
 async function cleanOldInstall(config) {
   for (const old of oldSymlinks) {
+    const normalized = old.replace(/\\/g, "/");
     if (existsSync(old)) {
-      unlinkSync(old);
-      console.log(`  Removed old symlink: ${old}`);
+      removeLink(old);
+      console.log(`  Removed old file: ${normalized}`);
     }
   }
   if (Array.isArray(config.plugin)) {
@@ -63,11 +91,12 @@ async function install() {
     mkdirSync(pluginDir, { recursive: true });
   }
 
-  if (!existsSync(symlinkPath)) {
-    symlinkSync(sourceFile, symlinkPath, "file");
-    console.log(`  Created symlink: ${symlinkPath} -> ${sourceFile}`);
+  let linkType = "symlink";
+  if (!existsSync(linkPath)) {
+    linkType = createLink(sourceFile, linkPath);
+    console.log(`  Created ${linkType}: ${linkPath.replace(/\\/g, "/")} -> ${sourceFile.replace(/\\/g, "/")}`);
   } else {
-    console.log("  Symlink already exists, skipping.");
+    console.log("  Plugin file already exists, skipping.");
   }
 
   if (!Array.isArray(config.plugin)) {
@@ -109,15 +138,15 @@ async function uninstall() {
     console.log("  Updated tui.json");
   }
 
-  if (existsSync(symlinkPath)) {
-    unlinkSync(symlinkPath);
-    console.log(`  Removed symlink: ${symlinkPath}`);
+  if (existsSync(linkPath)) {
+    removeLink(linkPath);
+    console.log(`  Removed plugin file: ${linkPath.replace(/\\/g, "/")}`);
   }
 
   for (const old of oldSymlinks) {
     if (existsSync(old)) {
-      unlinkSync(old);
-      console.log(`  Removed old symlink: ${old}`);
+      removeLink(old);
+      console.log(`  Removed old file: ${old.replace(/\\/g, "/")}`);
     }
   }
 
