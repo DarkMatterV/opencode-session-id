@@ -10,7 +10,7 @@ npx opencode-session-id-display install
 
 This will:
 
-1. Create a symlink at `~/.config/opencode/plugin/OpencodeSessionID.tui.tsx`
+1. Create a symlink at `~/.config/opencode/plugins/OpencodeSessionID.tui.tsx`
 2. Add the plugin to `~/.config/opencode/tui.json`
 
 Restart opencode TUI to see the session ID in the right sidebar.

@@ -8,7 +8,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const packageDir = resolve(__dirname, "..");
 const sourceFile = join(packageDir, "src/OpencodeSessionID.tui.tsx");
 const configDir = join(process.env.HOME, ".config", "opencode");
-const pluginDir = join(configDir, "plugin");
+const pluginDir = join(configDir, "plugins");
 const symlinkPath = join(pluginDir, "OpencodeSessionID.tui.tsx");
 const tuiJsonPath = join(configDir, "tui.json");
 
