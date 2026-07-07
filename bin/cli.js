@@ -9,9 +9,7 @@ const packageDir = resolve(__dirname, "..");
 const sourceFile = join(packageDir, "src/OpencodeSessionID.tui.tsx");
 
 const homeDir = process.env.HOME || process.env.USERPROFILE || "";
-const configDir = process.platform === "win32"
-  ? join(process.env.APPDATA || join(homeDir, "AppData", "Roaming"), "opencode")
-  : join(homeDir, ".config", "opencode");
+const configDir = join(homeDir, ".config", "opencode");
 
 const pluginDir = join(configDir, "plugins");
 const linkPath = join(pluginDir, "OpencodeSessionID.tui.tsx");
