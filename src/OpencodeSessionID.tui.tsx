@@ -19,6 +19,23 @@ const tui = async (api) => {
           </Show>
         )
       },
+      app_bottom() {
+        const theme = api.theme.current
+        const route = api.route.current
+        if (route.name !== "session") return null
+        const sid = route.params?.sessionID
+        if (!sid) return null
+        const session = api.state.session.get(sid)
+        if (!session?.parentID) return null
+        return (
+          <Show when={sid}>
+            <box flexDirection="row" gap={1} p={1} paddingLeft={4} paddingBottom={1}>
+              <text fg={theme.text}><b>Session</b></text>
+              <text fg={theme.textMuted}>{sid}</text>
+            </box>
+          </Show>
+        )
+      },
     },
   })
 }
