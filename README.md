@@ -1,6 +1,8 @@
 # opencode-session-id-display
 
-An [opencode](https://opencode.ai) TUI plugin that displays the current session ID in the sidebar.
+An [OpenCode](https://opencode.ai) TUI plugin that displays the current session ID in the sidebar.
+
+This is useful when you need to copy, share, inspect, or reference the active OpenCode session while working inside the TUI.
 
 ## Installation
 
@@ -8,12 +10,12 @@ An [opencode](https://opencode.ai) TUI plugin that displays the current session 
 npx opencode-session-id-display install
 ```
 
-This will:
+The installer will:
 
 1. Create a symlink at `~/.config/opencode/plugins/OpencodeSessionID.tui.tsx`
-2. Add the plugin to `~/.config/opencode/tui.json`
+2. Add the plugin entry to `~/.config/opencode/tui.json`
 
-Restart opencode TUI to see the session ID in the right sidebar.
+Restart the OpenCode TUI after installation. The active session ID will appear in the right sidebar.
 
 ## Uninstall
 
@@ -21,10 +23,30 @@ Restart opencode TUI to see the session ID in the right sidebar.
 npx opencode-session-id-display uninstall
 ```
 
-Removes the symlink and cleans up `tui.json`.
+This removes the symlink and cleans up the plugin entry in `tui.json`.
 
-## How it works
+## How It Works
 
-The plugin registers a `sidebar_content` slot in the opencode TUI, displaying the active session's ID.
+The plugin registers a `sidebar_content` slot in the OpenCode TUI and renders the current session ID from the active session context.
 
-Built with [@opentui/solid](https://www.npmjs.com/package/@opentui/solid) JSX and the [opencode TUI plugin API](https://opencode.ai).
+## Requirements
+
+- OpenCode TUI
+- Node.js with `npx`
+- `@opentui/core` >= 0.3.4
+- `@opentui/solid` >= 0.3.4
+
+## Development
+
+```bash
+git clone https://github.com/DarkMatterV/opencode-session-id.git
+cd opencode-session-id
+npm install
+```
+
+The plugin source is in `src/OpencodeSessionID.tui.tsx`, and the installer CLI is in `bin/cli.js`.
+
+## License
+
+MIT
+
